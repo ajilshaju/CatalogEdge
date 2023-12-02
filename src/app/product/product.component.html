@@ -1,0 +1,128 @@
+<button type="button" class="btn btn-primary m-2 float-end" data-bs-toggle="modal" data-bs-target="#productModal"
+    (click)="addClick()">
+    Add Product
+</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ProductId</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Colour</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let prod of product">
+            <td>{{ prod.ProductId }}</td>
+            <td>{{ prod.Name }}</td>
+            <td>{{ prod.Description }}</td>
+            <td>{{ prod.Category }}</td>
+            <td>€{{ prod.Price }}</td>
+            <td>{{ prod.Colour }}</td>
+            <td>
+                <button type="button" class="btn btn-light mr-1" data-bs-toggle="modal" data-bs-target="#productModal"
+                    (click)="editClick(prod)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                    </svg>
+                </button>
+
+                <button type="button" class="btn btn-light mr-1" (click)="deleteClick(prod.ProductId)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-trash-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                    </svg>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">{{ modalTitle }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-row bd-highlight mb-3">
+                    <div class="p-2 w-50 bd-highlight">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Name</span>
+                            <input type="text" class="form-control" [(ngModel)]="Name" name="name" required
+                                #nameInput="ngModel" maxlength="100" />
+                        </div>
+                        <div *ngIf="
+                nameInput.invalid && (nameInput.dirty || nameInput.touched)
+              " class="text-danger">
+                            <div *ngIf="nameInput.errors?.['required']">
+                                Name is required.
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Description</span>
+                            <input type="text" class="form-control" [(ngModel)]="Description" name="description"
+                                required #descriptionInput="ngModel" maxlength="150" />
+                        </div>
+                        <div *ngIf="
+                descriptionInput.invalid &&
+                (descriptionInput.dirty || descriptionInput.touched)
+              " class="text-danger">
+                            <div *ngIf="descriptionInput.errors?.['required']">
+                                <ng-container *ngIf="nameInput.valid">
+                                    Description for {{ Name }} is required.
+                                </ng-container>
+                                <ng-container *ngIf="nameInput.invalid">
+                                    Description is required.
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Category</span>
+                            <select class="form-select" [(ngModel)]="Category">
+                                <option *ngFor="let cat of category">
+                                    {{ cat.Name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Price</span>
+                            <input type="text" class="form-control" [(ngModel)]="Price" name="price" required
+                                #priceInput="ngModel" (input)="onInputChange($event)" />
+                        </div>
+                        <div *ngIf="
+                        priceInput.invalid && (priceInput.dirty || priceInput.touched)
+                      " class="text-danger">
+                            <div *ngIf="priceInput.errors?.['required']">
+                                Price is required.
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Colour</span>
+                            <input type="text" class="form-control" [(ngModel)]="Colour" />
+                        </div>
+                    </div>
+                </div>
+                <button type="button" (click)="createClick()"
+                    *ngIf="ProductId == 0 && nameInput?.valid && descriptionInput?.valid && priceInput?.valid"
+                    class="btn btn-primary">
+                    Create
+                </button>
+
+                <button type="button" (click)="updateClick()" *ngIf="ProductId != 0" class="btn btn-primary">
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
