@@ -20,8 +20,6 @@ export class CategoryComponent implements OnInit {
   Name = "";
   Description = "";
 
-
-
   ngOnInit(): void {
     this.refreshList();
   }
@@ -31,7 +29,6 @@ export class CategoryComponent implements OnInit {
     this.http.get<any>(environment.API_URL + 'category')
       .subscribe(data => {
         this.category = data;
-      
       });
 
   }

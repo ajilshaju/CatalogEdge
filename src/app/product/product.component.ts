@@ -104,11 +104,11 @@ export class ProductComponent implements OnInit {
 
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    const regex = /^[0-9]*$/; // Regular expression to allow only numbers
+    const regex = /^[0-9]*$/; 
 
     if (!regex.test(input.value)) {
-      input.value = input.value.replace(/[^0-9]/g, ''); // Replace non-numeric characters with an empty string
-      this.Price = input.value; // Update the model value
+      input.value = input.value.replace(/[^0-9]/g, ''); 
+      this.Price = input.value; // 
     }
 
   }
